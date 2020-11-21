@@ -1,4 +1,23 @@
-# D3 Homework - Data Journalism and D3
+# D3 Homework - Data Journalism and D
+
+# Interactive Visualization
+## Contributor
+* Sergio Guarneros Luna
+
+---
+Table of contents <a name="toc"></a>
+
+1. [Background](#1)
+2. [Instructions](#2)
+3. [Starter code](#3)
+4. [D3 Data Journalism - D3 Doppler](#4)
+5. [D3 Data Journalism - Impress the Boss](#5)
+6. [Visualization](#6)
+
+---
+
+### Background <a name="1"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
 
 ![Newsroom](https://media.giphy.com/media/v2xIous7mnEYg/giphy.gif)
 
@@ -10,19 +29,10 @@ The editor wants to run a series of feature stories about the health risks facin
 
 The data set included with the assignment is based on 2014 ACS 1-year estimates: [https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml](https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml), but you are free to investigate a different data set. The current data set includes data on rates of income, obesity, poverty, etc. by state. MOE stands for "margin of error."
 
-### Before You Begin
+---
 
-1. Create a new repository for this project called `D3-challenge`. **Do not add this homework to an existing repository**.
-
-2. Clone the new repository to your computer.
-
-3. Inside your local git repository, create a directory for the D3 challenge. Use the folder name to correspond to the challenge: **D3_data_journalism**.
-
-4. This homeworks utilizes both **html** and **Javascript** so be sure to add all the necessary files. These will be the main files to run for analysis.
-
-5. Push the above changes to GitHub or GitLab.
-
-## Your Task
+### Instructions <a name="2"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
 
 ### Core Assignment: D3 Dabbler (Required Assignment)
 
@@ -78,8 +88,40 @@ Your final product will be assessed on the following metrics:
 
 * Ensure your repository has regular commits (i.e. 20+ commits) and a thorough README.md file
 
-**Good luck!**
+---
 
-### Copyright
+### [Starter code] <a name="3"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
+#### Files
+- index.html -- provided html page for the assignment.
+- assets/css/style.css -- style sheet for webpage.
+- assets/data/data.csv -- provided data for assignment.
+- assets/js/app.js -- javascript file without code.
 
-Trilogy Education Services © 2019. All Rights Reserved.
+---
+
+### [D3 Data Journalism - D3 Doppler] <a name="4"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
+
+#### Files
+index.html -- D3 times webpage scatterplot between two variables.
+assets/js/app.js -- JavaScript for index.html webpage functionality.
+
+---
+
+### [D3 Data Journalism - Impress the Boss] <a name="5"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
+
+#### Files
+index.html -- D3 times webpage scatterplot between 6 variables.
+assets/js/app.js -- JavaScript for index.html webpage functionality.
+
+---
+
+### Visualization <a name="2"></a>
+<sub><sup>[Go back to the table of contents](#toc)</sub></sup>
+
+![Dashboard screenshot](Images/screen1.png)
+<br>
+![Dashboard screenshot](Images/screen2.png)
+<br>
