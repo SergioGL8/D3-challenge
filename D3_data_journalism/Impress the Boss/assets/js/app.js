@@ -186,37 +186,129 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
 
     // append initial circles
     var circlesGroup = chartGroup.selectAll("circle")
-        .data(hairData)
-        .enter()
-        .append("circle")
+        .data(healthData)
+    var elEnter = circlesGroup.enter()
+    var circle = elEnter.append("circle")
         .attr("cx", d => xLinearScale(d[chosenXAxis]))
-        .attr("cy", d => yLinearScale(d.num_hits))
-        .attr("r", 20)
-        .attr("fill", "pink")
-        .attr("opacity", ".5");
+        .attr("cy", d => yLinearScale(d[chosenXAxis]))
+        .attr("r", 15)
+        .attr("fill", "blue")
+        .attr("opacity", ".5")
+        .classed("stateCircle", true);
 
-    // Step 6: Initialize tool tip
-    // ==============================
-    var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
-        return (`${d.state}<br>Healthcare: ${d.healthcare}<br>Poverty: ${d.poverty}`);
-      });
+    // create circle text
+    var circleText = elemEnter.append("text")            
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d[chosenYAxis]))
+    .attr("dy", ".35em") 
+    .text(d => d.abbr)
+    .classed("stateText", true);
 
-    // Step 7: Create tooltip in the chart
-    // ==============================
-    chartGroup.call(toolTip);
-    
-    // Step 8: Create event listeners to display and hide the tooltip
-    // ==============================
-    circlesGroup.on("mouseover", function(data) {
-        toolTip.show(data, this);
-      })
-        // onmouseout event
-        .on("mouseout", function(data, index) {
-          toolTip.hide(data);
-        });
+    // Create group for three x-axis labels
+    var xlabelsGroup = chartGroup.append("g")
+    .attr("transform", `translate(${width / 2}, ${height + 20})`);
+
+    var povertyLabel = xlabelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .attr("value", "poverty") // value to grab for event listener
+    .classed("active", true)
+    .text("In Poverty (%)");
+    var ageLabel = xlabelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .attr("value", "age") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Age (Median)");
+    var incomeLabel = xlabelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .attr("value", "income") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Household Income (Median)");
+
+    // Create group for three y-axis labels
+    var yLabelsGroup = chartGroup.append("g")
+    .attr("transform", "rotate(-90)");
+
+    var healthcareLabel = yLabelsGroup.append("text")
+     .attr("x", 0 - (chartHeight / 2))
+     .attr("y", 40 - margin.left)
+     .attr("dy", "1em")
+     .attr("value", "healthcare")
+     .classed("inactive", true)
+     .text("Lacks Healthcare (%)");
+    var smokeLabel = yLabelsGroup.append("text")
+     .attr("x", 0 - (chartHeight / 2))
+     .attr("y", 20 - margin.left)
+     .attr("dy", "1em")
+     .attr("value", "smokes")
+     .classed("inactive", true)
+     .text("Smokes (%)");
+    var obeseLabel = yLabelsGroup.append("text")
+     .attr("x", 0 - (chartHeight / 2))
+     .attr("y", 0 - margin.left)
+     .attr("dy", "1em")
+     .attr("value", "obesity")
+     .classed("active", true)
+     .text("Obese (%)");
+
+    // updateToolTip function above csv import
+    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circle, circleText);
+
+    // x axis labels event listener
+    xlabelsGroup.selectAll("text")
+    .on("click", function() {
+
+        // get value of selection
+        chosenXAxis = d3.select(this).attr("value");
+        
+        // updates x scale for new data
+        xLinearScale = xScale(healthData, chosenXAxis, width);
+        
+        // updates x axis with transition
+        xAxis = renderXAxes(xLinearScale, xAxis);
+
+        //updates labels
+        if (chosenXAxis === "poverty") {
+            povertyLabel
+                .classed("active", true)
+                .classed("inactive", false);
+            ageLabel
+                .classed("active", false)
+                .classed("inactive", true);
+            incomeLabel
+                .classed("active", false)
+                .classed("inactive", true);
+        } else if (chosenXAxis === "age") {
+            povertyLabel
+                .classed("active", false)
+                .classed("inactive", true);
+            ageLabel
+                .classed("active", true)
+                .classed("inactive", false);
+            incomeLabel
+                .classed("active", false)
+                .classed("inactive", true);
+        } else {
+            povertyLabel
+                .classed("active", false)
+                .classed("inactive", true);
+            ageLabel
+                .classed("active", false)
+                .classed("inactive", true)
+            incomeLabel
+                .classed("active", true)
+                .classed("inactive", false);
+        }
+
+        // updates circles with new x values
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
+
+        // updates tooltips with new info
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circle, circleText);
+
+
 
     // Step 9: Add text to each datapoint
     // ==============================
