@@ -40,24 +40,103 @@ function xScale(healthData, chosenXAxis) {
 }
 
 // function used for updating xAxis var upon click on axis label
-function renderAxes(newXScale, xAxis) {
+function renderXAxes(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
     xAxis.transition()
       .duration(1000)
       .call(bottomAxis);
     return xAxis;
 }
+
+// Initial Params
+var chosenYAxis = "obesity";
+
+// function used for updating x-scale var upon click on axis label
+function yScale(healthData, chosenYAxis) {
+    // create scales
+    var yLinearScale = d3.scaleLinear()
+      .domain([d3.min(healthData, d => d[chosenYAxis]) * 0.8,
+        d3.max(healthData, d => d[chosenYAxis]) * 1.2
+      ])
+      .range([height, 0]);
   
+    return yLinearScale;
+}
+
+// function used for updating xAxis var upon click on axis label
+function renderYAxes(newYScale, yAxis) {
+    var leftAxis = d3.axisBottom(newYScale);
+    yAxis.transition()
+      .duration(1000)
+      .call(leftAxis);
+    return yAxis;
+}
+
 // function used for updating circles group with a transition to
 // new circles
-function renderCircles(circlesGroup, newXScale, chosenXAxis) {
-
+function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
     circlesGroup.transition()
       .duration(1000)
-      .attr("cx", d => newXScale(d[chosenXAxis]));
+      .attr("cx", d => newXScale(d[chosenXAxis]))
+      .attr("cy", d => newYScale(d[chosenYAxis]));
+    return circlesGroup;
+}
+
+// function used for updating text group with a transition to
+// new text
+function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
+    circletextGroup.transition()
+        .duration(1000)
+        .attr("x", d => newXScale(d[defaultXAxis]))
+        .attr("y", d => newYScale(d[defaultYAxis]));
+    return circletextGroup;
+}
+
+// function used for updating circles group with new tooltip
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
+
+    var xlabel;
+  
+    if (chosenXAxis === "poverty") {
+      xlabel = "Poverty:";
+    } else if (chosenXAxis === "income") {
+      xlabel = "Median Income:"
+    } else {
+      xlabel = "Age:";
+    }
+
+    var ylabel;
+  
+    if (chosenYAxis === "healthcare") {
+      xlabel = "Lacks Healthcare:";
+    } else if (chosenYAxis === "smokes") {
+      xlabel = "Median Income:"
+    } else {
+      xlabel = "Age:";
+    }
+  
+    var toolTip = d3.tip()
+      .attr("class", "tooltip")
+      .offset([80, -60])
+      .html(function(d) {
+        return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      });
+  
+    circlesGroup.call(toolTip);
+  
+    circlesGroup.on("mouseover", function(data) {
+      toolTip.show(data);
+    })
+      // onmouseout event
+      .on("mouseout", function(data, index) {
+        toolTip.hide(data);
+      });
   
     return circlesGroup;
-  }
+}
+
+
+
 
 // Import Data
 d3.csv("assets/data/data.csv").then(function(healthData) {
