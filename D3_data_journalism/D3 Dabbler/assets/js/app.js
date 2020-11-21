@@ -1,4 +1,5 @@
 // @TODO: YOUR CODE HERE!
+
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -14,8 +15,7 @@ var height = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper, append an SVG group that will hold our chart,
 // and shift the latter by left and top margins.
-var svg = d3
-  .select(".chart")
+var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -29,15 +29,15 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
 
     // Step 1: Parse Data/Cast as numbers
     // ==============================
-    data.forEach(function(data) {
+    healthData.forEach(function(data) {
       data.poverty = +data.poverty;
-      data.healthcare = +healthcare;
+      data.healthcare = +data.healthcare;
     });
 
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-      .domain([10, d3.max(healthData, d => d.poverty)])
+      .domain([d3.extent(healthData, d => d.poverty)])
       .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
@@ -61,33 +61,15 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     // Step 5: Create Circles
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
-    .data(hairData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d.poverty))
-    .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", "15")
-    .attr("fill", "blue")
-    .attr("opacity", ".5");
-
-    // Step 6: Add text to each datapoint
-    // ==============================
-    chartGroup.append("g")
-    .selectAll('text')
-    .data(healthData)
-    .enter()
-    .append("text")
-    .text(d=>d.abbr)
-    .attr("x",d=>xScale(d.poverty))
-    .attr("y",d=>yScale(d.healthcare))
-    .classed(".stateText", true)
-    .attr("alignment-baseline", "central");
-    .attr("font-family", "sans-serif")
-    .attr("text-anchor", "middle")
-    .attr("fill", "white")
-    .attr("font-size", "10px")
-    .style("font-weight", "bold")
-    
+        .data(healthData)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xLinearScale(d.poverty))
+        .attr("cy", d => yLinearScale(d.healthcare))
+        .attr("r", "15")
+        .attr("fill", "blue")
+        .attr("opacity", ".5")
+        .classed("stateCircle", true);
 
     // Step 6: Initialize tool tip
     // ==============================
@@ -112,6 +94,25 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
           toolTip.hide(data);
         });
 
+
+    // Step 6: Add text to each datapoint
+    // ==============================
+    chartGroup.append("g")
+        .selectAll('text')
+        .data(healthData)
+        .enter()
+        .append("text")
+        .text(d => d.abbr)
+        .attr("x",d => xLinearScale(d.poverty))
+        .attr("y",d => yLinearScale(d.healthcare))
+        .classed(".stateText", true)
+        .attr("alignment-baseline", "central")
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .attr("font-size", "10px")
+        .style("font-weight", "bold")
+        
     // Create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
@@ -124,7 +125,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "axisText")
-      .text("Hair Metal Band Hair Length (inches)");
+      .text("In Poverty (%)");
   }).catch(function(error) {
     console.log(error);
   });
