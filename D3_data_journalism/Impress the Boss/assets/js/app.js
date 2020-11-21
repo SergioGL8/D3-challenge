@@ -103,7 +103,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
     } else {
       var xlabel = "Age:";
     }
-  
+    
+    //conditioning y axis
     if (chosenYAxis === "healthcare") {
       var ylabel = "Lacks Healthcare:";
     } else if (chosenYAxis === "smokes") {
@@ -113,8 +114,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
     }
   
     var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([120, -60])
+      .attr("class", "d3-tip")
+      .offset([800, -60])
       .html(function(d) {
         if (chosenXAxis === "age") {
 
@@ -138,7 +139,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
       toolTip.show(data, this);
     })
       // onmouseout event
-      .on("mouseout", function(data, index) {
+      .on("mouseout", function(data) {
         toolTip.hide(data);
       });
     
@@ -232,21 +233,21 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .attr("transform", "rotate(-90)");
 
     var healthcareLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (Height / 2))
+     .attr("x", 0 - (height / 2))
      .attr("y", 40 - margin.left)
      .attr("dy", "1em")
      .attr("value", "healthcare")
      .classed("inactive", true)
      .text("Lacks Healthcare (%)");
     var smokeLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (Height / 2))
+     .attr("x", 0 - (height / 2))
      .attr("y", 20 - margin.left)
      .attr("dy", "1em")
      .attr("value", "smokes")
      .classed("inactive", true)
      .text("Smokes (%)");
     var obeseLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (Height / 2))
+     .attr("x", 0 - (height / 2))
      .attr("y", 0 - margin.left)
      .attr("dy", "1em")
      .attr("value", "obesity")
