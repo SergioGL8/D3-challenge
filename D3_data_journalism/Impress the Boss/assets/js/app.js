@@ -87,45 +87,45 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
 function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
     circletextGroup.transition()
         .duration(1000)
-        .attr("x", d => newXScale(d[defaultXAxis]))
-        .attr("y", d => newYScale(d[defaultYAxis]));
+        .attr("x", d => newXScale(d[chosenXAxis]))
+        .attr("y", d => newYScale(d[chosenYAxis]));
     return circletextGroup;
 }
 
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
 
-    var xlabel;
-  
+    //conditioning x axis 
     if (chosenXAxis === "poverty") {
-      xlabel = "Poverty:";
+      var xlabel = "Poverty:";
     } else if (chosenXAxis === "income") {
-      xlabel = "Median Income:"
+      var xlabel = "Median Income:"
     } else {
-      xlabel = "Age:";
+      var xlabel = "Age:";
     }
-
-    var ylabel;
   
     if (chosenYAxis === "healthcare") {
-      xlabel = "Lacks Healthcare:";
+      var ylabel = "Lacks Healthcare:";
     } else if (chosenYAxis === "smokes") {
-      xlabel = "Smokers:"
+      var ylabel = "Smokers:"
     } else {
       ylabel = "Obesity:";
     }
   
     var toolTip = d3.tip()
       .attr("class", "tooltip")
-      .offset([80, -60])
+      .offset([120, -60])
       .html(function(d) {
         if (chosenXAxis === "age") {
+
             // display Age without format for x axis
             return (`${d.state}<hr>${xlabel} ${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}%`);
             } else if (chosenXAxis !== "poverty" && chosenXAxis !== "age") {
+            
             // display Income in dollars for x axis
             return (`${d.state}<hr>${xlabel}$${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}%`);
             } else {
+            
             // display Poverty as percentage for x axis
             return (`${d.state}<hr>${xlabel}${d[chosenXAxis]}%<br>${ylabel}${d[chosenYAxis]}%`);
             }      
@@ -197,7 +197,7 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
         .classed("stateCircle", true);
 
     // create circle text
-    var circleText = elemEnter.append("text")            
+    var circleText = elEnter.append("text")            
     .attr("x", d => xLinearScale(d[chosenXAxis]))
     .attr("y", d => yLinearScale(d[chosenYAxis]))
     .attr("dy", ".35em") 
@@ -232,21 +232,21 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .attr("transform", "rotate(-90)");
 
     var healthcareLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (chartHeight / 2))
+     .attr("x", 0 - (Height / 2))
      .attr("y", 40 - margin.left)
      .attr("dy", "1em")
      .attr("value", "healthcare")
      .classed("inactive", true)
      .text("Lacks Healthcare (%)");
     var smokeLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (chartHeight / 2))
+     .attr("x", 0 - (Height / 2))
      .attr("y", 20 - margin.left)
      .attr("dy", "1em")
      .attr("value", "smokes")
      .classed("inactive", true)
      .text("Smokes (%)");
     var obeseLabel = ylabelsGroup.append("text")
-     .attr("x", 0 - (chartHeight / 2))
+     .attr("x", 0 - (Height / 2))
      .attr("y", 0 - margin.left)
      .attr("dy", "1em")
      .attr("value", "obesity")
