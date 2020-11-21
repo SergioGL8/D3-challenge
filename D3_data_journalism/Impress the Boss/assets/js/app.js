@@ -65,7 +65,7 @@ function yScale(healthData, chosenYAxis) {
 
 // function used for updating yAxis var upon click on axis label
 function renderYAxes(newYScale, yAxis) {
-    var leftAxis = d3.axisBottom(newYScale);
+    var leftAxis = d3.axisLeft(newYScale);
     yAxis.transition()
       .duration(1000)
       .call(leftAxis);
@@ -110,7 +110,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
     } else if (chosenYAxis === "smokes") {
       var ylabel = "Smokers:"
     } else {
-      ylabel = "Obesity:";
+      var ylabel = "Obesity:";
     }
   
     var toolTip = d3.tip()
@@ -164,7 +164,7 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
       data.age = +data.age;
       data.smokes = +data.smokes;
       data.income = +data.income;
-      data.obesity = +data.obesity;
+      data.obesity = data.obesity;
     });
 
     // xLinearScale function above csv import
