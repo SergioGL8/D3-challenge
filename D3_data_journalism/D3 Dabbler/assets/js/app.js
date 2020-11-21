@@ -38,11 +38,14 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     // ==============================
     var xLinearScale = d3.scaleLinear()
       .domain(d3.extent(healthData, d => d.poverty))
-      .range([0, width]);
+      .range([0, width])
+      .nice();
 
     var yLinearScale = d3.scaleLinear()
-      .domain([0, d3.max(healthData, d => d.healthcare)])
-      .range([height, 0]);
+      .domain([2, d3.max(healthData, d => d.healthcare)])
+      .range([height, 0])
+      .nice();
+
 
     // Step 3: Create axis functions
     // ==============================
@@ -93,8 +96,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
           toolTip.hide(data);
         });
 
-
-    // Step 6: Add text to each datapoint
+    // Step 9: Add text to each datapoint
     // ==============================
     chartGroup.append("g")
         .selectAll('text')
