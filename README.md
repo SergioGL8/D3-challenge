@@ -104,8 +104,8 @@ Your final product will be assessed on the following metrics:
 <sub><sup>[Go back to the table of contents](#toc)</sub></sup>
 
 #### Files
-index.html -- D3 times webpage scatterplot between two variables.
-assets/js/app.js -- JavaScript for index.html webpage functionality.
+- index.html -- D3 times webpage scatterplot between two variables.
+- assets/js/app.js -- JavaScript for index.html webpage functionality.
 
 ---
 
@@ -113,8 +113,8 @@ assets/js/app.js -- JavaScript for index.html webpage functionality.
 <sub><sup>[Go back to the table of contents](#toc)</sub></sup>
 
 #### Files
-index.html -- D3 times webpage scatterplot between 6 variables.
-assets/js/app.js -- JavaScript for index.html webpage functionality.
+- index.html -- D3 times webpage scatterplot between 6 variables.
+- assets/js/app.js -- JavaScript for index.html webpage functionality.
 
 ---
 
