@@ -110,82 +110,90 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
     if (chosenYAxis === "healthcare") {
       xlabel = "Lacks Healthcare:";
     } else if (chosenYAxis === "smokes") {
-      xlabel = "Median Income:"
+      xlabel = "Smokers:"
     } else {
-      xlabel = "Age:";
+      ylabel = "Obesity:";
     }
   
     var toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+        if (chosenXAxis === "age") {
+            // display Age without format for x axis
+            return (`${d.state}<hr>${xlabel} ${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}%`);
+            } else if (chosenXAxis !== "poverty" && chosenXAxis !== "age") {
+            // display Income in dollars for x axis
+            return (`${d.state}<hr>${xlabel}$${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}%`);
+            } else {
+            // display Poverty as percentage for x axis
+            return (`${d.state}<hr>${xlabel}${d[chosenXAxis]}%<br>${ylabel}${d[chosenYAxis]}%`);
+            }      
       });
   
     circlesGroup.call(toolTip);
   
+    //onmouseover information
     circlesGroup.on("mouseover", function(data) {
-      toolTip.show(data);
+      toolTip.show(data, this);
     })
       // onmouseout event
       .on("mouseout", function(data, index) {
         toolTip.hide(data);
       });
+    
+    textGroup.on("mouseover", function(data){
+        toolTip.show(data, this);
+    })
+    .on("mouseout", function(data){
+        toolTip.hide(data);
+    });
   
     return circlesGroup;
 }
 
-
-
-
 // Import Data
-d3.csv("assets/data/data.csv").then(function(healthData) {
+d3.csv("assets/data/data.csv").then(function(healthData, err) {
+    if (err) throw err;
 
-    // Step 1: Parse Data/Cast as numbers
-    // ==============================
+    // Parse Data/Cast as numbers
     healthData.forEach(function(data) {
       data.poverty = +data.poverty;
       data.healthcare = +data.healthcare;
+      data.age = +data.age;
+      data.smokes = +data.smokes;
+      data.income = +data.income;
+      data.obesity = +data.obesity;
     });
 
-    // Step 2: Create scale functions
-    // ==============================
-    var xLinearScale = d3.scaleLinear()
-      .domain(d3.extent(healthData, d => d.poverty))
-      .range([0, width])
-      .nice();
+    // xLinearScale function above csv import
+    var xLinearScale = xScale(healthData, chosenXAxis, chosenYAxis);
+    var yLinearScale = yScale(healthData, chosenXAxis, chosenYAxis);
 
-    var yLinearScale = d3.scaleLinear()
-      .domain([2, d3.max(healthData, d => d.healthcare)])
-      .range([height, 0])
-      .nice();
-
-
-    // Step 3: Create axis functions
-    // ==============================
+    // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
-    // Step 4: Append Axes to the chart
-    // ==============================
-    chartGroup.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .call(bottomAxis);
+    // append x axis
+    var xAxis = chartGroup.append("g")
+        .classed("x-axis", true)
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis);
 
-    chartGroup.append("g")
-      .call(leftAxis);
+    // append y axis
+    var yAxis = chartGroup.append("g")
+        .call(leftAxis);
 
-    // Step 5: Create Circles
-    // ==============================
+    // append initial circles
     var circlesGroup = chartGroup.selectAll("circle")
-        .data(healthData)
+        .data(hairData)
         .enter()
         .append("circle")
-        .attr("cx", d => xLinearScale(d.poverty))
-        .attr("cy", d => yLinearScale(d.healthcare))
-        .attr("r", "15")
-        .attr("fill", "blue")
-        .attr("opacity", ".5")
+        .attr("cx", d => xLinearScale(d[chosenXAxis]))
+        .attr("cy", d => yLinearScale(d.num_hits))
+        .attr("r", 20)
+        .attr("fill", "pink")
+        .attr("opacity", ".5");
 
     // Step 6: Initialize tool tip
     // ==============================
