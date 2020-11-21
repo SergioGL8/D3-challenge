@@ -1,34 +1,10 @@
 // @TODO: YOUR CODE HERE!
 
-var svgWidth = 960;
-var svgHeight = 500;
-
-var margin = {
-  top: 20,
-  right: 40,
-  bottom: 80,
-  left: 100
-};
-
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
-
-// Create an SVG wrapper, append an SVG group that will hold our chart,
-// and shift the latter by left and top margins.
-var svg = d3.select("#scatter")
-  .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
-
-// Append an SVG group
-var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
 // Initial Params
 var chosenXAxis = "poverty";
 
 // function used for updating x-scale var upon click on axis label
-function xScale(healthData, chosenXAxis) {
+function xScale(healthData, chosenXAxis, width) {
     // create scales
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(healthData, d => d[chosenXAxis]) * 0.8,
@@ -52,7 +28,7 @@ function renderXAxes(newXScale, xAxis) {
 var chosenYAxis = "obesity";
 
 // function used for updating y-scale var upon click on axis label
-function yScale(healthData, chosenYAxis) {
+function yScale(healthData, chosenYAxis, height) {
     // create scales
     var yLinearScale = d3.scaleLinear()
       .domain([d3.min(healthData, d => d[chosenYAxis]) * 0.8,
@@ -97,25 +73,25 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
 
     //conditioning x axis 
     if (chosenXAxis === "poverty") {
-      var xlabel = "Poverty:";
+      var xlabel = "Poverty: ";
     } else if (chosenXAxis === "income") {
-      var xlabel = "Median Income:"
+      var xlabel = "Median Income: "
     } else {
-      var xlabel = "Age:";
+      var xlabel = "Age: ";
     }
     
     //conditioning y axis
     if (chosenYAxis === "healthcare") {
-      var ylabel = "Lacks Healthcare:";
+      var ylabel = "Lacks Healthcare: ";
     } else if (chosenYAxis === "smokes") {
-      var ylabel = "Smokers:"
+      var ylabel = "Smokers: "
     } else {
-      var ylabel = "Obesity:";
+      var ylabel = "Obesity: ";
     }
   
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      .offset([800, -60])
+      .offset([80, -60])
       .html(function(d) {
         if (chosenXAxis === "age") {
 
@@ -153,9 +129,41 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
     return circlesGroup;
 }
 
-// Import Data
-d3.csv("assets/data/data.csv").then(function(healthData, err) {
-    if (err) throw err;
+function scatter(){
+    // Create an SVG wrapper, append an SVG group that will hold our chart,
+    // and shift the latter by left and top margins.
+    var svgA = d3.select("#scatter")
+    .select("svg");
+    if (!svgA.empty()) {
+        svgA.remove();
+    }
+    var svgWidth = 960;
+    var svgHeight = 500;
+
+    var margin = {
+        top: 20,
+        right: 40,
+        bottom: 80,
+        left: 100
+    };
+
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
+
+    // add SVG elements
+    var svg = d3
+    .select("#scatter")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+    // Append an SVG group
+    var chartGroup = svg.append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Import Data
+    d3.csv("assets/data/data.csv").then(function(healthData, err) {
+        if (err) throw err;
 
     // Parse Data/Cast as numbers
     healthData.forEach(function(data) {
@@ -168,8 +176,8 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     });
 
     // xLinearScale function above csv import
-    var xLinearScale = xScale(healthData, chosenXAxis, chosenYAxis);
-    var yLinearScale = yScale(healthData, chosenXAxis, chosenYAxis);
+    var xLinearScale = xScale(healthData, chosenXAxis, height);
+    var yLinearScale = yScale(healthData, chosenXAxis, width);
 
     // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
