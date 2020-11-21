@@ -24,6 +24,23 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+// Initial Params
+var chosenXAxis = "poverty";
+
+// function used for updating x-scale var upon click on axis label
+function xScale(hairData, chosenXAxis) {
+    // create scales
+    var xLinearScale = d3.scaleLinear()
+      .domain([d3.min(hairData, d => d[chosenXAxis]) * 0.8,
+        d3.max(hairData, d => d[chosenXAxis]) * 1.2
+      ])
+      .range([0, width]);
+  
+    return xLinearScale;
+  
+  }
+
+
 // Import Data
 d3.csv("assets/data/data.csv").then(function(healthData) {
 
