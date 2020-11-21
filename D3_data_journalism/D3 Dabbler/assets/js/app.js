@@ -69,7 +69,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
         .attr("r", "15")
         .attr("fill", "blue")
         .attr("opacity", ".5")
-        .classed("stateCircle", true);
+        //.classed("stateCircle", true);
 
     // Step 6: Initialize tool tip
     // ==============================
