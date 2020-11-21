@@ -37,11 +37,11 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.extent(healthData, d => d.poverty)])
+      .domain(d3.extent(healthData, d => d.poverty))
       .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-      .domain([5, d3.max(healthData, d => d.healthcare)])
+      .domain([0, d3.max(healthData, d => d.healthcare)])
       .range([height, 0]);
 
     // Step 3: Create axis functions
@@ -69,7 +69,6 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
         .attr("r", "15")
         .attr("fill", "blue")
         .attr("opacity", ".5")
-        //.classed("stateCircle", true);
 
     // Step 6: Initialize tool tip
     // ==============================
