@@ -118,7 +118,7 @@ Your final product will be assessed on the following metrics:
 
 ---
 
-### Visualization <a name="2"></a>
+### Visualization <a name="6"></a>
 <sub><sup>[Go back to the table of contents](#toc)</sub></sup>
 
 ![Dashboard screenshot](Images/screen1.png)
