@@ -123,5 +123,5 @@ Your final product will be assessed on the following metrics:
 
 ![Dashboard screenshot](Images/screen1.png)
 <br>
-![Dashboard screenshot](Images/screen2.png)
+![Dashboard screenshot](Images/scree2.png)
 <br>
